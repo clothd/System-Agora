@@ -1,13 +1,14 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "5ef6acb0dd25d2838aaa8c52cdc47152"
-application_url = "https://example.com/"
+application_url = "https://concentrate-disaster-comprehensive-publishing.trycloudflare.com"
 embedded = true
 name = "Test"
 handle = "test-17914"
 
 [build]
 include_config_on_deploy = true
+automatically_update_urls_on_dev = true
 
 [webhooks]
 api_version = "2025-01"
@@ -25,7 +26,11 @@ api_version = "2025-01"
 scopes = "write_products"
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [
+  "https://concentrate-disaster-comprehensive-publishing.trycloudflare.com/auth/callback",
+  "https://concentrate-disaster-comprehensive-publishing.trycloudflare.com/auth/shopify/callback",
+  "https://concentrate-disaster-comprehensive-publishing.trycloudflare.com/api/auth/callback"
+]
 
 [pos]
 embedded = false
