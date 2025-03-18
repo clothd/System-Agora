@@ -25,8 +25,8 @@ export default function Index() {
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "100vw",
-          height: "100vh",
+          width: "90vw",
+          height: "90vh",
         }}
       >
         <h1
@@ -55,7 +55,7 @@ export default function Index() {
             height: "calc(100vh - 100px)",
           }}
         >
-          <Scrollable style={{ flex: 1, padding: "20px" }}>
+          <Scrollable style={{ flex: 1 }}>
             {messages.length === 0 ? (
               <div
                 style={{
@@ -78,6 +78,7 @@ export default function Index() {
                   key={i}
                   style={{
                     marginBottom: "12px",
+                    padding: "16px",
                     display: "flex",
                     justifyContent:
                       msg.sender === "user" ? "flex-end" : "flex-start",
@@ -109,25 +110,23 @@ export default function Index() {
 
           <div
             style={{
-              borderTop: "1px solid #f0f0f0",
+              borderTop: "3px solid #f0f0f0",
               padding: "10px",
               display: "flex",
               alignItems: "center",
-              width: "100%",
-              boxSizing: "border-box",
               background: "white",
-              position: "relative",
+              boxSizing: "border-box",
             }}
           >
             <TextField
               value={input}
               onChange={setInput}
-              placeholder="What's on your mind?"
+              placeholder="What should I do?"
               onKeyPress={handleKeyPress}
               autoFocus
               multiline
               style={{
-                width: "100vw",
+                width: "90%",
                 fontFamily: '"Helvetica Neue", sans-serif',
                 fontWeight: "300",
                 fontSize: "15px",
@@ -138,8 +137,7 @@ export default function Index() {
               onClick={handleSend}
               primary
               style={{
-                position: "absolute",
-                right: "16px",
+                marginLeft: "auto",
                 background: "#ff6b6b",
                 borderRadius: "30px",
                 boxShadow: "none",
