@@ -13,6 +13,7 @@ const shopify = shopifyApi({
   apiSecretKey: process.env.SHOPIFY_API_SECRET,
   scopes: process.env.SHOPIFY_SCOPES.split(","),
   hostName: new URL(process.env.SHOPIFY_APP_URL).host,
+  sessionStorage: sessionStorage, 
 });
 
 // Store token in session
