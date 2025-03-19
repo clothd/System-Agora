@@ -21,7 +21,7 @@ app.use(
     name: "shopify-session",
     keys: [process.env.SHOPIFY_API_SECRET],
     maxAge: 24 * 60 * 60 * 1000, // 1 day
-  })
+  }),
 );
 
 // Redirect merchants to install the app
@@ -34,7 +34,7 @@ app.get("/auth", async (req, res) => {
     res,
     shop,
     "/auth/callback",
-    true
+    true,
   );
   res.redirect(authUrl);
 });
@@ -42,7 +42,11 @@ app.get("/auth", async (req, res) => {
 // Handle Shopify OAuth callback
 app.get("/auth/callback", async (req, res) => {
   try {
-    const session = await shopify.auth.validateAuthCallback(req, res, req.query);
+    const session = await shopify.auth.validateAuthCallback(
+      req,
+      res,
+      req.query,
+    );
     req.session.shopify = session;
     res.redirect(`/app?shop=${session.shop}`);
   } catch (error) {
@@ -62,3 +66,17 @@ app.get("/api/shop", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+//LLM service here
+app.post("/api/chat", verifyShopifySession, async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    const llmResponse = await callLLMService(message);
+
+    res.json({ response: llmResponse });
+  } catch (error) {
+    console.error("Chat error:", error);
+    res.status(500).json({ error: "Error processing message" });
+  }
+});
