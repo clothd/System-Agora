@@ -1,9 +1,25 @@
-import { Card, Page, TextField, Button, Scrollable } from "@shopify/polaris";
-import { useState } from "react";
+import { TextField, Button, Scrollable } from "@shopify/polaris";
+import { useState, useEffect } from "react";
+import Sidebar from "../components/Sidebar";
+import "../styles/Chat.css";
 
 export default function Index() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
+  useEffect(() => {
+    // Apply dark mode to body when state changes
+    if (darkMode) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+  }, [darkMode]);
 
   const handleSend = () => {
     if (input.trim()) {
@@ -14,114 +30,53 @@ export default function Index() {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
       handleSend();
     }
   };
 
   return (
-    <Page fullWidth>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "90vw",
-          height: "90vh",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "32px",
-            fontWeight: "300",
-            letterSpacing: "4px",
-            color: "#ff6b6b",
-            textAlign: "center",
-            margin: "20px 0",
-            fontFamily: '"Helvetica Neue", sans-serif',
-          }}
-        >
-          AGORA
-        </h1>
+    <div className={`chat-container ${darkMode ? "dark" : ""}`}>
+      <Sidebar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
-        <div
-          style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            borderRadius: "12px",
-            overflow: "hidden",
-            background: "rgba(255, 255, 255, 0.95)",
-            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
-            height: "calc(100vh - 100px)",
-          }}
-        >
-          <Scrollable style={{ flex: 1 }}>
+      <div className="main-content">
+        <div className="chat-area">
+          <div className="message-feed">
             {messages.length === 0 ? (
-              <div
-                style={{
-                  display: "flex",
-                  height: "100%",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#aaaaaa",
-                  fontFamily: '"Helvetica Neue", sans-serif',
-                  fontWeight: "300",
-                  fontSize: "16px",
-                  letterSpacing: "1px",
-                }}
-              >
-                How can I help you today?
-              </div>
+              <div className="empty-state">How can I help you today?</div>
             ) : (
               messages.map((msg, i) => (
                 <div
                   key={i}
-                  style={{
-                    marginBottom: "12px",
-                    padding: "16px",
-                    display: "flex",
-                    justifyContent:
-                      msg.sender === "user" ? "flex-end" : "flex-start",
-                  }}
+                  className={`message ${msg.sender === "user" ? "user" : "bot"}`}
                 >
-                  <div
-                    style={{
-                      maxWidth: "70%",
-                      padding: "12px 16px",
-                      borderRadius:
-                        msg.sender === "user"
-                          ? "18px 18px 4px 18px"
-                          : "18px 18px 18px 4px",
-                      background: msg.sender === "user" ? "#ff6b6b" : "#f1f1f1",
-                      color: msg.sender === "user" ? "white" : "#333",
-                      fontFamily: '"Helvetica Neue", sans-serif',
-                      fontWeight: "300",
-                      fontSize: "15px",
-                      letterSpacing: "0.3px",
-                      lineHeight: "1.4",
-                    }}
-                  >
-                    {msg.text}
-                  </div>
+                  <div className="message-bubble">{msg.text}</div>
                 </div>
               ))
             )}
-          </Scrollable>
+          </div>
 
-          <div
-            style={{
-              borderTop: "3px solid #f0f0f0",
-              padding: "10px",
-              display: "flex",
-              alignItems: "center",
-              background: "white",
-              boxSizing: "border-box",
-            }}
-          >
+          <div className="action-buttons">
+            <div className="action-button">
+              <span>Solve</span>
+            </div>
+            <div className="action-button">
+              <span>Find opportunities</span>
+            </div>
+            <div className="action-button">
+              <span>Analyze data</span>
+            </div>
+            <div className="action-button">
+              <span>More</span>
+            </div>
+          </div>
+
+          <div className="message-input">
             <TextField
               value={input}
               onChange={setInput}
-              placeholder="What should I do?"
+              placeholder="Message Agora..."
               onKeyPress={handleKeyPress}
               autoFocus
               multiline
@@ -130,7 +85,6 @@ export default function Index() {
                 fontFamily: '"Helvetica Neue", sans-serif',
                 fontWeight: "300",
                 fontSize: "15px",
-                padding: "0 8px",
               }}
             />
             <Button
@@ -142,7 +96,6 @@ export default function Index() {
                 borderRadius: "30px",
                 boxShadow: "none",
                 padding: "8px 16px",
-                fontFamily: '"Helvetica Neue", sans-serif',
                 fontWeight: "400",
                 letterSpacing: "0.5px",
                 fontSize: "14px",
@@ -153,6 +106,6 @@ export default function Index() {
           </div>
         </div>
       </div>
-    </Page>
+    </div>
   );
 }
